@@ -12,7 +12,7 @@ class Maze:
         num_cols: int,
         cell_size_x: int,
         cell_size_y: int,
-        win: Window,
+        win: Window=None,
     ):
         self._x1 = x1
         self._y1 = y1
@@ -40,10 +40,13 @@ class Maze:
         c: Cell = self._cells[i][j]
         top_left_x = self._x1 + (i % self._num_cols) * self._cell_size_x
         top_left_y = self._y1 + (j % self._num_rows) * self._cell_size_y
-        print(f"cell ({i}, {j}) - top_left_x = {top_left_x}, top_left_y = {top_left_y}")
+        # print(f"cell ({i}, {j}) - top_left_x = {top_left_x}, top_left_y = {top_left_y}")
         c.draw(top_left_x, top_left_y, top_left_x + self._cell_size_x, top_left_y + self._cell_size_y)
         self._animate()
 
     def _animate(self):
+        if self._win is None:
+            return
+        
         self._win.redraw()
         time.sleep(0.008)
