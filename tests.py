@@ -1,5 +1,6 @@
 import unittest
 
+from graphics import Window
 from maze import Maze
 
 class Tests(unittest.TestCase):
@@ -54,6 +55,11 @@ class Tests(unittest.TestCase):
             len(m1._cells[0]),
             num_rows,
         )
+    
+    def test_first_and_last_maze_cell(self):
+        w = Window(150, 150)
+        m = Maze(20, 20, 5, 5, 20, 20, w)
+        w.wait_for_close()
 
 if __name__ == "__main__":
     unittest.main()
