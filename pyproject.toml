@@ -1,0 +1,10 @@
+[project]
+name = "maze-solver"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Jacob Shaffer", email = "1503954+Phyllostachys@users.noreply.github.com" }
+]
+requires-python = ">=3.11"
+dependencies = []
