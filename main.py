@@ -10,18 +10,21 @@ if __name__ == "__main__":
     # w.draw_line(Line(Point(8, 7), Point(70, 150)), "white")
     c1 = Cell(w)
     c1.has_right_wall = False
-    c1.draw(10, 10, 100, 100)
+    c1.draw(10, 10, 30, 30)
 
     c2 = Cell(w)
     c2.has_left_wall = False
-    c2.draw(101, 101, 150, 150)
+    c2.draw(100, 20, 120, 40)
 
     c3 = Cell(w)
     c3.has_bottom_wall = False
-    c3.draw(150, 150, 160, 160)
+    c3.draw(300, 350, 320, 370)
 
     c4 = Cell(w)
     c4.has_top_wall = False
-    c4.draw(165, 165, 170, 170)
+    c4.draw(165, 165, 185, 185)
+
+    c1.draw_move(c3)
+    c2.draw_move(c4, True)
 
     w.wait_for_close()

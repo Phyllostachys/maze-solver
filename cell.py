@@ -1,4 +1,3 @@
-from tkinter import Canvas
 from graphics import Point, Line, Window
 
 class Cell:
@@ -20,13 +19,23 @@ class Cell:
         self._y2 = y2
         if self.has_left_wall:
             line = Line(Point(self._x1, self._y1), Point(self._x1, self._y2))
-            self._win.draw_line(line, "blue")
+            self._win.draw_line(line)
         if self.has_right_wall:
             line = Line(Point(self._x2, self._y1), Point(self._x2, self._y2))
-            self._win.draw_line(line, "blue")
+            self._win.draw_line(line)
         if self.has_top_wall:
             line = Line(Point(self._x1, self._y1), Point(self._x2, self._y1))
-            self._win.draw_line(line, "blue")
+            self._win.draw_line(line)
         if self.has_bottom_wall:
             line = Line(Point(self._x1, self._y2), Point(self._x2, self._y2))
-            self._win.draw_line(line, "blue")
+            self._win.draw_line(line)
+    
+    def draw_move(self, to_cell: 'Cell', undo=False):
+        line_color = "gray"
+        if undo:
+            line_color = "red"
+
+        first_middle = Point((self._x1 + self._x2) / 2, (self._y1 + self._y2) / 2)
+        second_middle = Point((to_cell._x1 + to_cell._x2) / 2, (to_cell._y1 + to_cell._y2) / 2)
+        line = Line(first_middle, second_middle)
+        self._win.draw_line(line, line_color)
