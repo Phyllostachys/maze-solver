@@ -1,3 +1,4 @@
+import random
 import time
 
 from graphics import Window
@@ -13,6 +14,7 @@ class Maze:
         cell_size_x: int,
         cell_size_y: int,
         win: Window=None,
+        seed: int=None
     ):
         self._x1 = x1
         self._y1 = y1
@@ -22,8 +24,16 @@ class Maze:
         self._cell_size_y = cell_size_y
         self._win = win
 
+        if seed is not None:
+            seed = random.seed(seed)
+        
+        i = random.randrange(self._num_cols)
+        j = random.randrange(self._num_rows)
+
         self._create_cells()
         self._break_entrance_and_exit()
+        self._break_walls_r(i, j)
+        self._reset_cells_visited()
 
     def _create_cells(self):
         self._cells = []
@@ -60,3 +70,45 @@ class Maze:
         last_y = self._num_rows - 1
         self._cells[last_x][last_y].has_bottom_wall = False
         self._draw_cell(last_x, last_y)
+    
+    def _break_walls_r(self, i: int, j: int):
+        self._cells[i][j].visited = True
+        while True:
+            # create list of adjacent Cells to pick from
+            to_visit = []
+            if i < self._num_cols - 1 and not self._cells[i+1][j].visited:
+                to_visit.append((i + 1, j, 'r'))
+            if j < self._num_rows - 1 and not self._cells[i][j+1].visited:
+                to_visit.append((i, j + 1, 'd'))
+            if i > 0 and not self._cells[i-1][j].visited:
+                to_visit.append((i - 1, j, 'l'))
+            if j > 0 and not self._cells[i][j-1].visited:
+                to_visit.append((i, j - 1, 'u'))
+
+            # if we have no adjacent Cells who haven't been visited, draw and return
+            if len(to_visit) == 0:
+                self._draw_cell(i, j)
+                return
+            
+            # choose a direction and break the walls
+            new_direction = random.choice(to_visit)
+            if new_direction[2] == 'u':
+                self._cells[i][j].has_top_wall = False
+                self._cells[new_direction[0]][new_direction[1]].has_bottom_wall = False
+            elif new_direction[2] == 'd':
+                self._cells[i][j].has_bottom_wall = False
+                self._cells[new_direction[0]][new_direction[1]].has_top_wall = False
+            elif new_direction[2] == 'l':
+                self._cells[i][j].has_left_wall = False
+                self._cells[new_direction[0]][new_direction[1]].has_right_wall = False
+            elif new_direction[2] == 'r':
+                self._cells[i][j].has_right_wall = False
+                self._cells[new_direction[0]][new_direction[1]].has_left_wall = False
+            
+            # recurse deeper into graph
+            self._break_walls_r(new_direction[0], new_direction[1])
+    
+    def _reset_cells_visited(self):
+        for idx in range(0, len(self._cells)):
+            for jdx in range(0, len(self._cells[0])):
+                self._cells[idx][jdx].visited = False

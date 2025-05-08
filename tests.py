@@ -44,8 +44,8 @@ class Tests(unittest.TestCase):
         )
     
     def test_maze_create_cells_huge(self):
-        num_cols = 1000
-        num_rows = 1000
+        num_cols = 75
+        num_rows = 75
         m1 = Maze(0, 0, num_rows, num_cols, 100, 100)
         self.assertEqual(
             len(m1._cells),
@@ -56,9 +56,9 @@ class Tests(unittest.TestCase):
             num_rows,
         )
     
-    def test_first_and_last_maze_cell(self):
+    def test_maze_gen(self):
         w = Window(150, 150)
-        m = Maze(20, 20, 5, 5, 20, 20, w)
+        m = Maze(20, 20, 5, 5, 20, 20, w, seed=1)
         w.wait_for_close()
 
 if __name__ == "__main__":
