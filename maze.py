@@ -34,6 +34,61 @@ class Maze:
         self._break_entrance_and_exit()
         self._break_walls_r(i, j)
         self._reset_cells_visited()
+    
+    def solve(self) -> bool:
+        i = 0
+        j = 0
+        return self._solve_r(i, j)
+    
+    def _solve_r(self, i: int, j: int) -> bool:
+        self._animate()
+        current_cell: Cell = self._cells[i][j]
+        current_cell.visited = True
+        if i == self._num_cols - 1 and j == self._num_rows - 1:
+            return True
+        
+        # check right
+        if i < self._num_cols - 1:
+            right_cell: Cell = self._cells[i+1][j]
+            if not current_cell.has_right_wall and not right_cell.has_left_wall and not right_cell.visited:
+                current_cell.draw_move(right_cell)
+                ret: bool = self._solve_r(i+1, j)
+                if ret:
+                    return True
+                current_cell.draw_move(right_cell, True)
+        
+        # check down
+        if j < self._num_rows - 1:
+            down_cell: Cell = self._cells[i][j+1]
+            if not current_cell.has_bottom_wall and not down_cell.has_top_wall and not down_cell.visited:
+                current_cell.draw_move(down_cell)
+                ret = self._solve_r(i, j+1)
+                if ret:
+                    return True
+                current_cell.draw_move(down_cell, True)
+        
+        # check left
+        if i > 0:
+            left_cell: Cell = self._cells[i-1][j]
+            if not current_cell.has_left_wall and not left_cell.has_right_wall and not left_cell.visited:
+                current_cell.draw_move(left_cell)
+                ret: bool = self._solve_r(i-1, j)
+                if ret:
+                    return True
+                current_cell.draw_move(left_cell, True)
+        
+        # check up
+        if j > 0:
+            up_cell: Cell = self._cells[i][j-1]
+            if not current_cell.has_top_wall and not up_cell.has_bottom_wall and not up_cell.visited:
+                current_cell.draw_move(up_cell)
+                ret = self._solve_r(i, j-1)
+                if ret:
+                    return True
+                current_cell.draw_move(up_cell, True)
+        
+        # none of the directions worked out, so return false
+        return False
 
     def _create_cells(self):
         self._cells = []
